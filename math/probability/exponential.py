@@ -11,7 +11,7 @@ class Exponential:
         """Class constructor
 
         data: list of the data to be used to estimate the distribution
-        lambtha: the expected number of occrences in a given time frame"""
+        lambtha: the expected number of occurrences in a given time frame"""
         if data is None:
             self.lambtha = float(lambtha)
             if lambtha <= 0:
@@ -32,7 +32,7 @@ class Exponential:
         Return: PDF value of x"""
         if x < 0:
             return 0
-        return self.lambtha*(self.e**(-self.lambtha*x))
+        return self.lambtha * (self.e ** (-self.lambtha * x))
 
     def cdf(self, x):
         """Function that calculates the value of the CDF for a given time
@@ -43,5 +43,4 @@ class Exponential:
         Return: CDF value for x"""
         if x < 0:
             return 0
-        return 1 - self.e**(-self.lambtha * x)
-    
+        return 1 - self.e ** (-self.lambtha * x)
