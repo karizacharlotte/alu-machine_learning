@@ -66,3 +66,5 @@ class Binomial:
         for n in range(1, x + 1):
             result *= n
         return result
+    
+    
