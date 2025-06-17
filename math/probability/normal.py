@@ -37,24 +37,19 @@ class Normal:
         return (z * self.stddev) + self.mean
 
     def pdf(self, x):
-        """Calculating the value of the PDF for a given x-value
-        """
+        """Calculating the value of the PDF for a given x-value"""
         stdd = self.stddev
-        firstPart = 1 / (stdd * ((self.π*2)**0.5))
-        secondPart = self.e ** (self.z_score(x)**2 * -0.5)
-        return firstPart * secondPart
+        first_part = 1 / (stdd * ((self.π * 2) ** 0.5))
+        second_part = self.e ** (self.z_score(x) ** 2 * -0.5)
+        return first_part * second_part
 
     def erf(self, x):
-        """Fuction that calculates the erf of x"""
-        firstPart = (2 / (self.π**0.5))
-        secondPart = x - (x**3 / 3) + (x**5 / 10) - (x**7 / 42) + (x**9 / 216)
-        return firstPart * secondPart
+        """Function that calculates the erf of x"""
+        first_part = 2 / (self.π ** 0.5)
+        second_part = x - (x ** 3 / 3) + (x ** 5 / 10) - (x ** 7 / 42) + (x ** 9 / 216)
+        return first_part * second_part
 
     def cdf(self, x):
-        """Function that calculates the value of the CDF for a given x-value
-        """
-        z_score_modified = (x - self.mean) / (self.stddev * (2**0.5))
-        return (1 / 2) * (1 + self.erf(z_score_modified))
-    
-    
-    
+        """Function that calculates the value of the CDF for a given x-value"""
+        z_score_modified = (x - self.mean) / (self.stddev * (2 ** 0.5))
+        return 0.5 * (1 + self.erf(z_score_modified))
