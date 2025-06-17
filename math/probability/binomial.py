@@ -45,7 +45,7 @@ class Binomial:
             return 0
         firstPart = self.factorial(self.n) / (
             self.factorial(k) * self.factorial(self.n - k))
-        secondPart = (self.p**k) * ((1 - self.p)**(self.n - k))
+        secondPart = (self.p ** k) * ((1 - self.p) ** (self.n - k))
         return firstPart * secondPart
 
     def cdf(self, k):
@@ -66,4 +66,3 @@ class Binomial:
         for n in range(1, x + 1):
             result *= n
         return result
-
