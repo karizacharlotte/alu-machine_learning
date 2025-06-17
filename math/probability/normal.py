@@ -55,3 +55,6 @@ class Normal:
         """
         z_score_modified = (x - self.mean) / (self.stddev * (2**0.5))
         return (1 / 2) * (1 + self.erf(z_score_modified))
+    
+    
+    
