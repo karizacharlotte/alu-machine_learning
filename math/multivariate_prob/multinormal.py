@@ -3,6 +3,7 @@
 Defines class MultiNormal that represents a Multivariate Normal Distribution
 """
 
+
 import numpy as np
 
 
@@ -71,4 +72,3 @@ class MultiNormal:
         pdf *= np.exp(-0.5 * mult)
         pdf = pdf[0][0]
         return pdf
-
