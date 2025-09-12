@@ -23,7 +23,7 @@ class Neuron:
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
         if nx < 1:
-            raise ValueError('nx must be a positive')
+            raise ValueError('nx must be positive')
 
         # initialize private instance attributes
         self.__W = np.random.normal(size=(1, nx))
@@ -44,4 +44,18 @@ class Neuron:
     @property
     def A(self):
         """Return output"""
+        return self.__A
+
+    def forward_prop(self, X):
+        """Calculates the forward propagation of the neuron
+
+        Args:
+            X (numpy.ndarray): matrix with the input data of shape (nx, m)
+
+        Returns:
+            numpy.ndarray: The output of the neural network.
+        """
+        z = np.matmul(self.__W, X) + self.__b
+        sigmoid = 1 / (1 + np.exp(-z))
+        self.__A = sigmoid
         return self.__A
