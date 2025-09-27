@@ -112,19 +112,19 @@ class BayesianOptimization:
                 contains the expected improvement of each potential sample
         """
         mu, sigma = self.gp.predict(self.X_s)
-        
+
         if self.minimize:
             Y_opt = np.min(self.gp.Y)
             imp = Y_opt - mu - self.xsi
         else:
             Y_opt = np.max(self.gp.Y)
             imp = mu - Y_opt - self.xsi
-        
+
         with np.errstate(divide='warn'):
             Z = imp / sigma
             EI = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
             EI[sigma == 0.0] = 0.0
-        
+
         X_next = self.X_s[np.argmax(EI)]
-        
+
         return X_next, EI
