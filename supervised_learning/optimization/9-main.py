@@ -9,7 +9,7 @@ def forward_prop(X, W, b):
     A = 1 / (1 + np.exp(-Z))
     return A
 
-def calculate_grads(Y, A, W, b):
+def calculate_grads(Y, A, W, b, X):
     m = Y.shape[0]
     dZ = A - Y
     dW = np.matmul(X.T, dZ) / m
@@ -41,7 +41,7 @@ if __name__ == '__main__':
         if not (i % 100):
             cost = calculate_cost(Y, A)
             print('Cost after {} iterations: {}'.format(i, cost))
-        dW, db = calculate_grads(Y, A, W, b)
+        dW, db = calculate_grads(Y, A, W, b, X)
         W, dW_prev1, dW_prev2 = update_variables_Adam(0.001, 0.9, 0.99, 1e-8, W, dW, dW_prev1, dW_prev2, i + 1)
         b, db_prev1, db_prev2 = update_variables_Adam(0.001, 0.9, 0.99, 1e-8, b, db, db_prev1, db_prev2, i + 1)
     A = forward_prop(X, W, b)
