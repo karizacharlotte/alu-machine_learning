@@ -97,7 +97,7 @@ class BayesianOptimization:
             optimization should be formed for minimization or maximization")
         self.f = f
         self.gp = GP(X_init, Y_init, l, sigma_f)
-        self.X_s = X_init
+        self.X_s = np.linspace(min, max, ac_samples).reshape(-1, 1)
         self.xsi = xsi
         self.minimize = minimize
 
@@ -113,7 +113,23 @@ class BayesianOptimization:
             EI [numpy.ndarray of shape (ac_samples,)]:
                 contains the expected improvement of each potential sample
         """
-        return None, None
+        mu, sigma = self.gp.predict(self.X_s)
+
+        if self.minimize:
+            Y_opt = np.min(self.gp.Y)
+            imp = Y_opt - mu - self.xsi
+        else:
+            Y_opt = np.max(self.gp.Y)
+            imp = mu - Y_opt - self.xsi
+
+        with np.errstate(divide='warn'):
+            Z = imp / sigma
+            EI = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
+            EI[sigma == 0.0] = 0.0
+
+        X_next = self.X_s[np.argmax(EI)]
+
+        return X_next, EI
 
     def optimize(self, iterations=100):
         """
@@ -137,4 +153,28 @@ class BayesianOptimization:
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
             raise ValueError("iterations must be a positive number")
-        return None, None
+
+        for i in range(iterations):
+            X_next, EI = self.acquisition()
+
+            # Check if X_next has already been sampled
+            if np.any([np.allclose(X_next, x) for x in self.gp.X]):
+                break
+
+            # Sample the black-box function at X_next
+            Y_next = self.f(X_next)
+            Y_next = Y_next.reshape(-1, 1)
+
+            # Update the Gaussian Process with new sample
+            self.gp.update(X_next, Y_next)
+
+        # Return optimal point and value
+        if self.minimize:
+            idx_opt = np.argmin(self.gp.Y)
+        else:
+            idx_opt = np.argmax(self.gp.Y)
+
+        X_opt = self.gp.X[idx_opt]
+        Y_opt = self.gp.Y[idx_opt]
+
+        return X_opt, Y_opt
