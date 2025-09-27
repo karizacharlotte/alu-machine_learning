@@ -158,11 +158,14 @@ class BayesianOptimization:
             X_next, EI = self.acquisition()
 
             # Check if X_next has already been sampled
-            if np.any([np.allclose(X_next, x) for x in self.gp.X]):
+            if np.any([np.allclose(X_next.flatten(), x.flatten()) for x in self.gp.X]):
                 break
 
             # Sample the black-box function at X_next
-            Y_next = self.f(X_next)
+            # Convert to scalar if needed for function call
+            Y_next = self.f(X_next.flatten())
+            if np.isscalar(Y_next):
+                Y_next = np.array([Y_next])
 
             # Ensure correct shapes for update method
             # X_next should be shape (1,), Y_next should be shape (1,)
